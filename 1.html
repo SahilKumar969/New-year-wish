@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>2026: For My Everything ❤️</title>
+    <style>
+        :root {
+            --pink: #ff4d6d;
+            --white: #ffffff;
+            --glow: 0 0 30px rgba(255, 77, 109, 0.9);
+        }
+
+        body, html {
+            margin: 0; padding: 0;
+            width: 100%; height: 100%;
+            background-color: #050505;
+            font-family: 'Arial Black', sans-serif;
+            overflow: hidden;
+            transition: background-color 0.4s ease;
+            touch-action: none;
+        }
+
+        body::before {
+            content: "";
+            position: absolute; inset: 0;
+            background: linear-gradient(45deg, transparent 40%, rgba(255, 77, 109, 0.05) 50%, transparent 60%);
+            background-size: 200% 200%;
+            animation: moveGradient 10s infinite linear;
+            pointer-events: none;
+        }
+
+        @keyframes moveGradient {
+            0% { background-position: 0% 0%; }
+            100% { background-position: 200% 200%; }
+        }
+
+        #overlay {
+            position: fixed; inset: 0; z-index: 9999;
+            background: radial-gradient(circle, #fff 0%, #ffeef2 100%);
+            display: flex; justify-content: center; align-items: center;
+            transition: transform 1.2s cubic-bezier(0.86, 0, 0.07, 1);
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(20px);
+            padding: 8vw;
+            width: 80%;
+            max-width: 500px;
+            border-radius: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            text-align: center; box-shadow: 0 30px 60px rgba(0,0,0,0.1);
+        }
+
+        #start-btn {
+            width: 100%;
+            max-width: 300px;
+            padding: 20px;
+            font-size: clamp(1rem, 4vw, 1.5rem);
+            background: var(--pink); color: white;
+            border: none; border-radius: 60px; cursor: pointer;
+            font-weight: bold; text-transform: uppercase;
+            letter-spacing: 2px; box-shadow: 0 15px 40px rgba(255, 77, 109, 0.5);
+            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        #lyrics-container {
+            position: fixed; inset: 0;
+            display: flex; justify-content: center; align-items: center;
+            z-index: 100; pointer-events: none;
+            padding: 20px;
+        }
+
+        #lyrics-text {
+            font-size: clamp(2rem, 10vw, 10rem); 
+            text-align: center; color: white;
+            text-transform: uppercase; letter-spacing: -1px;
+            -webkit-text-stroke: 1.5px var(--pink);
+            filter: drop-shadow(var(--glow)); margin: 0;
+            perspective: 500px;
+            line-height: 1.1;
+        }
+
+        .polaroid {
+            position: absolute; background: white;
+            padding: 8px 8px 35px 8px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.7);
+            width: clamp(140px, 30vw, 260px); 
+            z-index: 10; opacity: 0;
+            animation: entry 0.9s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            will-change: transform;
+        }
+
+        .polaroid img { 
+            width: 100%; 
+            aspect-ratio: 1 / 1.2;
+            object-fit: cover; 
+        }
+
+        @keyframes entry {
+            0% { transform: scale(0) rotate(-50deg) translateZ(-500px); opacity: 0; }
+            100% { transform: scale(1) rotate(var(--r)) translateZ(0); opacity: 1; }
+        }
+
+        .particle {
+            position: fixed; pointer-events: none; z-index: 50;
+            animation: particleAnim 1.8s ease-out forwards;
+        }
+
+        @keyframes particleAnim {
+            0% { transform: translate(-50%, -50%) scale(0); opacity: 1; }
+            100% { transform: translate(var(--tx), var(--ty)) scale(var(--s)) rotate(var(--tr)); opacity: 0; }
+        }
+
+        .punch { animation: punchEffect 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        @keyframes punchEffect {
+            0% { transform: scale(0.5) rotateX(45deg); opacity: 0; }
+            50% { transform: scale(1.1) rotateX(-10deg); opacity: 1; }
+            100% { transform: scale(1) rotateX(0deg); }
+        }
+
+        .beat-flash { background-color: #220008 !important; }
+
+        /* FINALE MESSAGE STYLE */
+        #finale-message {
+            position: fixed; inset: 0;
+            display: none; justify-content: center; align-items: center;
+            flex-direction: column;
+            z-index: 200; background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(10px);
+            opacity: 0; transition: opacity 2s ease;
+        }
+
+        #finale-message h1 {
+            font-size: clamp(3rem, 15vw, 8rem);
+            color: gold; text-align: center;
+            -webkit-text-stroke: 1px #fff;
+            text-shadow: 0 0 50px gold;
+            margin: 0;
+        }
+
+        @media (max-width: 480px) {
+            #lyrics-text { -webkit-text-stroke: 1px var(--pink); }
+            .polaroid { padding-bottom: 25px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="overlay">
+        <div class="glass-card">
+            <h1 style="color: #333; font-size: 1.2rem; margin-bottom: 20px;">To my 2025, and my 2026. ❤️</h1>
+            <button id="start-btn">Unlock ❤️</button>
+        </div>
+    </div>
+
+    <audio id="bg-music" src="audio1.mp3"></audio>
+
+    <div id="lyrics-container">
+        <h1 id="lyrics-text"></h1>
+    </div>
+
+    <div id="photo-garden"></div>
+
+    <div id="finale-message">
+        <h1>HAPPY NEW YEAR 2026</h1>
+        <p style="color: white; font-size: 1.5rem; margin-top: 20px;">May god bless you....😽❤️</p>
+    </div>
+
+    <script>
+        const audio = document.getElementById('bg-music');
+        const lyrics = document.getElementById('lyrics-text');
+        const garden = document.getElementById('photo-garden');
+        const finale = document.getElementById('finale-message');
+
+        const timeline = [
+            [0.1, "WITH YOU", "Images/bachii1.jpeg"],
+            [1.2, "I'M ALIVE", "Images/me_and_sweetie.jpeg"],
+            [3.1, "FALL IN LOVE", "Images/s1.jpeg"],
+            [4.6, "BUT IT LEFT ME LONELY", "Images/s2.jpeg"],
+            [6.4, "TRIED TO TRUST", "Images/s3.jpg"],
+            [7.8, "IT BURNED ME SLOWLY", "Images/s4.jpg"],
+            [9.3, "I DIDN'T KNOW", "Images/s5.jpg"],
+            [11.2, "WHAT I WAS LOOKING FOR", "Images/bachii.jpeg"],
+            [14.2, "TILL I FOUND...", "Images/s6.jpg"],
+            [16.2, "I FOUND HER ❤️", "Images/s2.jpeg"] 
+        ];
+
+        document.getElementById('start-btn').addEventListener('click', () => {
+            document.getElementById('overlay').style.transform = 'translateY(-100%)';
+            audio.play();
+            requestAnimationFrame(render);
+        });
+
+        let idx = 0;
+        let photos = [];
+        let finaleTriggered = false;
+
+        function render() {
+            if (idx < timeline.length && audio.currentTime >= timeline[idx][0]) {
+                const [time, text, src] = timeline[idx];
+                lyrics.innerText = text;
+                lyrics.classList.remove('punch');
+                void lyrics.offsetWidth;
+                lyrics.classList.add('punch');
+                spawnPolaroid(src);
+                const isLast = idx === timeline.length - 1;
+                spawnBurst(isLast);
+                flashBackground();
+                idx++;
+            }
+
+            // Continuous sparkles after last lyric
+            if (idx >= timeline.length && audio.currentTime > 16.5) {
+                if (Math.random() > 0.85) spawnBurst(true); 
+                
+                // Trigger the Final Happy New Year message
+                if (audio.currentTime > 18.5 && !finaleTriggered) {
+                    showFinale();
+                }
+            }
+
+            photos.forEach(p => {
+                const speed = p.dataset.speed;
+                const shiftX = Math.sin(Date.now() * 0.001 * speed) * 10;
+                const shiftY = Math.cos(Date.now() * 0.001 * speed) * 10;
+                p.style.transform = `rotate(${p.dataset.rot}deg) translate(${shiftX}px, ${shiftY}px)`;
+            });
+
+            requestAnimationFrame(render);
+        }
+
+        function spawnPolaroid(src) {
+            const div = document.createElement('div');
+            div.className = 'polaroid';
+            const rot = Math.random() * 20 - 10;
+            div.dataset.rot = rot;
+            div.dataset.speed = Math.random() * 0.4 + 0.4;
+            const isMobile = window.innerWidth < 768;
+            const horizontalMargin = isMobile ? 15 : 25;
+            const verticalMargin = isMobile ? 20 : 25;
+            div.style.left = (Math.random() * (100 - horizontalMargin * 2) + horizontalMargin) + "%";
+            div.style.top = (Math.random() * (100 - verticalMargin * 2) + verticalMargin) + "%";
+            div.style.setProperty('--r', rot + "deg");
+            div.innerHTML = `<img src="${src}">`;
+            garden.appendChild(div);
+            photos.push(div);
+        }
+
+        function spawnBurst(isFinal) {
+            const isMobile = window.innerWidth < 768;
+            const count = isFinal ? (isMobile ? 20 : 35) : (isMobile ? 8 : 15);
+            const symbols = isFinal ? ['✨', '💖', '❤️'] : ['❤️'];
+            for(let i=0; i<count; i++) {
+                const p = document.createElement('div');
+                p.className = 'particle';
+                p.innerHTML = symbols[Math.floor(Math.random() * symbols.length)];
+                p.style.left = '50%'; p.style.top = '50%';
+                const radius = isMobile ? 400 : 1000;
+                p.style.setProperty('--tx', (Math.random()-0.5) * radius + "px");
+                p.style.setProperty('--ty', (Math.random()-0.5) * radius + "px");
+                p.style.setProperty('--tr', (Math.random() * 720) + "deg");
+                p.style.setProperty('--s', (Math.random() * 1 + 1));
+                document.body.appendChild(p);
+                setTimeout(() => p.remove(), 1800);
+            }
+        }
+
+        function flashBackground() {
+            document.body.classList.add('beat-flash');
+            setTimeout(() => document.body.classList.remove('beat-flash'), 150);
+        }
+
+        function showFinale() {
+            finaleTriggered = true;
+            finale.style.display = 'flex';
+            setTimeout(() => {
+                finale.style.opacity = '1';
+                // Loop finale sparkles
+                setInterval(() => spawnBurst(true), 400);
+            }, 100);
+        }
+    </script>
+</body>
+</html>
